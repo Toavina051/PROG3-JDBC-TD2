@@ -29,7 +29,7 @@ public class Dish {
         return ingredients;
     }
 
-    public Double getDishPrice() {
+    /*public Double getDishPrice() {
         Double price = 0.0;
         int count = 0;
         while ( count != ingredients.size() ) {
@@ -37,6 +37,11 @@ public class Dish {
             count++;
         }
         return price;
+    }*/
+    public Double getDishPrice(){
+        return ingredients.stream()
+                .mapToDouble(Ingredient::getPrice)
+                .sum();
     }
 
     @Override
