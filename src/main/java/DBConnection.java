@@ -3,18 +3,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    String url;
-    String user;
-    String password;
+    public Connection getDBConnection() throws SQLException {
 
-    public DBConnection() {
-        this.url = "jdbc:postgresql://localhost:5432/mini_dish_db";
-        this.user = "mini_dish_db_manager";
-        this.password = "123456";
-    }
+        String url = System.getenv("jdbc:postgresql://localhost:5432/mini_dish_db");
+        String username = System.getenv("mini_dish_db_manager");
+        String password = System.getenv("123456");
 
-    public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+        if (url == null || username == null || password == null) {
+            throw new RuntimeException("Variables d'environnement manquantes");
+        }
+
+        return DriverManager.getConnection(url, username, password);
     }
 
 }
