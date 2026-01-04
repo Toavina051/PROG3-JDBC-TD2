@@ -32,4 +32,15 @@ public class Ingredient {
     public Dish getDish() {
         return dish;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", dish=" + dish +
+                '}';
+    }
 }

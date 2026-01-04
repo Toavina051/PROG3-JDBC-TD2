@@ -1,15 +1,14 @@
 import java.util.List;
 
 public class Dish {
-    private final int id;
-    private final String name;
-    private final DishTypeEnum dishType;
-    private final List<Ingredient>  ingredients;
+    private int id;
+    private String name;
+    private DishTypeEnum dishType;
+    private List<Ingredient>  ingredients;
 
-    public Dish(int id, String name, DishTypeEnum dishType, List<Ingredient> ingredients) {
+    public Dish(int id, String name, List<Ingredient> ingredients) {
         this.id = id;
         this.name = name;
-        this.dishType = dishType;
         this.ingredients = ingredients;
     }
 
