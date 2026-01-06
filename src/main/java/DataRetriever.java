@@ -86,10 +86,28 @@ public class DataRetriever {
             throw new RuntimeException("Error in findIngredients: " + e.getMessage());
         }
         if (ingredients.isEmpty()) {
-            throw new RuntimeException("Ingredients not found");
+            System.out.println("List vide");
         }
         return ingredients;
     }
 
+    public List<Ingredient> createIngredients(List<Ingredient> newIngredients) {
+        String sql = "INSERT INTO ingredient(id, name, price, category) VALUES (?, ?, ?)";
+
+        try (Connection dbconnection = connection.getDBConnection()) {
+            for (Ingredient ingredient : newIngredients) {
+                try (PreparedStatement insertStatement = dbconnection.prepareStatement(sql)) {
+                    insertStatement.setString(1, ingredient.getName());
+                    insertStatement.setDouble(2, ingredient.getPrice());
+                    insertStatement.setString(3, ingredient.getCategory().name());
+                    insertStatement.executeUpdate();
+                }
+            }
+            return newIngredients;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error in createIngredients: " + e.getMessage());
+        }
+    }
 
 }

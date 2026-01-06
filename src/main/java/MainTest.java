@@ -16,5 +16,23 @@ public class MainTest {
         List<Ingredient> ingredientsPage2 =
                 dataRetriever.findIngredients(3, 5);
         ingredientsPage2.forEach(System.out::println);
+
+        System.out.println("\nTEST i) createIngredients OK");
+
+        Ingredient fromage = new Ingredient(
+                0,
+                "Fromage",
+                1200.0,
+                CategoryEnum.DAIRY,
+                null
+        );
+
+        Ingredient oignon = new Ingredient(
+                0,
+                "Oignon",
+                500.0,
+                CategoryEnum.VEGETABLE,
+                null
+        );
     }
 }
