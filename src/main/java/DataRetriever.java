@@ -92,14 +92,15 @@ public class DataRetriever {
     }
 
     public List<Ingredient> createIngredients(List<Ingredient> newIngredients) {
-        String sql = "INSERT INTO ingredient(id, name, price, category) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO ingredient(id, name, price, category) VALUES (?, ?, ?, ?)";
 
         try (Connection dbconnection = connection.getDBConnection()) {
             for (Ingredient ingredient : newIngredients) {
                 try (PreparedStatement insertStatement = dbconnection.prepareStatement(sql)) {
-                    insertStatement.setString(1, ingredient.getName());
-                    insertStatement.setDouble(2, ingredient.getPrice());
-                    insertStatement.setString(3, ingredient.getCategory().name());
+                    insertStatement.setInt(1, ingredient.getId());
+                    insertStatement.setString(2, ingredient.getName());
+                    insertStatement.setDouble(3, ingredient.getPrice());
+                    insertStatement.setString(4, ingredient.getCategory().name());
                     insertStatement.executeUpdate();
                 }
             }

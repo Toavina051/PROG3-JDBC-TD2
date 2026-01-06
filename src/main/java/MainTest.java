@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class MainTest {
@@ -20,7 +21,7 @@ public class MainTest {
         System.out.println("\nTEST i) createIngredients OK");
 
         Ingredient fromage = new Ingredient(
-                0,
+                6,
                 "Fromage",
                 1200.0,
                 CategoryEnum.DAIRY,
@@ -28,11 +29,21 @@ public class MainTest {
         );
 
         Ingredient oignon = new Ingredient(
-                0,
+                7,
                 "Oignon",
                 500.0,
                 CategoryEnum.VEGETABLE,
                 null
         );
+
+        try {
+            List<Ingredient> createdIngredients =
+                    dataRetriever.createIngredients(
+                            Arrays.asList(fromage, oignon)
+                    );
+            createdIngredients.forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
