@@ -29,6 +29,7 @@ public class DataRetriever {
                     dish = new Dish(
                             result.getInt(1),
                             result.getString(2),
+                            DishTypeEnum.valueOf(result.getString(3)),
                             ingredients
                     );
                 }

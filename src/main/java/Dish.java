@@ -6,9 +6,10 @@ public class Dish {
     private DishTypeEnum dishType;
     private List<Ingredient>  ingredients;
 
-    public Dish(int id, String name, List<Ingredient> ingredients) {
+    public Dish(int id, String name, DishTypeEnum dishType, List<Ingredient> ingredients) {
         this.id = id;
         this.name = name;
+        this.dishType = dishType;
         this.ingredients = ingredients;
     }
 
@@ -46,11 +47,8 @@ public class Dish {
     @Override
     public String toString() {
         return "Dish{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", dishType=" + dishType +
+                "name='" + name + '\'' +
                 ", ingredients=" + ingredients +
-                ", dishPrice=" + getDishPrice() +
                 '}';
     }
 }
