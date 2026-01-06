@@ -45,5 +45,10 @@ public class MainTest {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+
+        System.out.println("\nTEST e) findDishsByIngredientName(\"fleur\")");
+        List<Dish> dishesWithFleur =
+                dataRetriever.findDishsByIngredientName("fleur");
+        dishesWithFleur.forEach(System.out::println);
     }
 }

@@ -111,11 +111,11 @@ public class DataRetriever {
         }
     }
 
-    public List<Dish> findDishesByIngredientName(String ingredientName) {
+    public List<Dish> findDishsByIngredientName(String ingredientName) {
 
         List<Dish> dishes = new ArrayList<>();
 
-        String sql = "SELECT dish.id, dish.name FROM dish JOIN ingredient ON dish.id = ingredient.dish_id JOIN ingredient ON ingredient.id = ingredient.id WHERE ingredient.name ILIKE ?";
+        String sql = "SELECT dish.id, dish.name, dish.dish_type, ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM dish JOIN ingredient ON dish.id = ingredient.id_dish WHERE ingredient.name ILIKE ?";
 
         try (
                 Connection connection = this.connection.getDBConnection();
