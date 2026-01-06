@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dish {
@@ -11,6 +12,9 @@ public class Dish {
         this.name = name;
         this.dishType = dishType;
         this.ingredients = ingredients;
+    }
+
+    public Dish(int id, String name) {
     }
 
     public int getId() {
