@@ -57,4 +57,39 @@ public class DataRetriever {
         }
     }
 
+    public List<Ingredient> findIngredients(int page, int size) {
+
+        List<Ingredient> ingredients = new ArrayList<>();
+        int offset = (page - 1) * size;
+
+        String sql = "SELECT ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM ingredient ORDER BY ingredient.id LIMIT ? OFFSET ?";
+
+        try (Connection dbconnection = connection.getDBConnection();
+             PreparedStatement statement = dbconnection.prepareStatement(sql)) {
+
+            statement.setInt(1, size);
+            statement.setInt(2, offset);
+
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                ingredients.add(new Ingredient(
+                        result.getInt(1),
+                        result.getString(2),
+                        result.getDouble(3),
+                        CategoryEnum.valueOf(result.getString(4)),
+                        null
+                ));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error in findIngredients: " + e.getMessage());
+        }
+        if (ingredients.isEmpty()) {
+            throw new RuntimeException("Ingredients not found");
+        }
+        return ingredients;
+    }
+
+
 }
