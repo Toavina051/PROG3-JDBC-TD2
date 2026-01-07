@@ -176,8 +176,7 @@ public class DataRetriever {
 
         List<Dish> dishes = new ArrayList<>();
 
-        String sql = "SELECT dish.id, dish.name, dish.dish_type, ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM dish JOIN ingredient ON dish.id = ingredient.id_dish WHERE ingredient.name ILIKE ?";
-
+        String sql = "SELECT dish.id, dish.name, dish.dish_type, ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM dish JOIN ingredient ON dish.id = ingredient.id_dish WHERE ingredient.name ILIKE ? ORDER BY dish.id";
         try (
                 Connection connection = this.connection.getDBConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)

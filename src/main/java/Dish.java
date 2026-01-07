@@ -99,7 +99,6 @@ public class Dish {
     public String toString() {
         return "Dish{" +
                 "name='" + name + '\'' +
-                ", ingredients=" + ingredients +
                 '}';
     }
 }

@@ -4,11 +4,13 @@ import java.sql.SQLException;
 
 public class DBConnection {
     public Connection getDBConnection() throws SQLException {
-
-        String url = ("jdbc:postgresql://localhost:5432/mini_dish_db");
-        String username = ("mini_dish_db_manager");
-        String password = ("123456");
-
-        return DriverManager.getConnection(url, username, password);
+        try {
+            return DriverManager.getConnection(
+                    System.getenv("JDBC_URL"),
+                    System.getenv("USERNAME"),
+                    System.getenv("PASSWORD"));
+        }catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
 }
