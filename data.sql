@@ -11,3 +11,9 @@ INSERT INTO Ingredient (id, name, price, category, id_dish) VALUES
                                                                 (3, 'Poulet', '4500.00', 'ANIMAL', 2),
                                                                 (4, 'Chocolat', '3000.00', 'OTHER', 4),
                                                                 (5, 'Beurre', '2500.00', 'DAIRY', 4);
+
+UPDATE dish SET price = 2000 WHERE name = 'Salade fraiche';
+UPDATE dish SET price = 6000 WHERE name = 'Poulet grille';
+UPDATE dish SET price = NULL WHERE name = 'Riz au légume';
+UPDATE dish SET price = NULL WHERE name = 'Gâteau au chocolat';
+UPDATE dish SET price = NULL WHERE name = 'Salade de fruit';

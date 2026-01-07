@@ -12,7 +12,7 @@ public class DataRetriever {
 
     public Dish findDishById(Integer id) {
 
-        String sql = "SELECT dish.id, dish.name, dish.dish_type, ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM dish LEFT JOIN ingredient ON dish.id = ingredient.id_dish WHERE dish.id = ?";
+        String sql = "SELECT dish.id, dish.name, dish.dish_type, dish.price, ingredient.id, ingredient.name, ingredient.price, ingredient.category FROM dish LEFT JOIN ingredient ON dish.id = ingredient.id_dish WHERE dish.id = ?";
 
         try (Connection dbconnection = connection.getDBConnection();
              PreparedStatement statement = dbconnection.prepareStatement(sql)) {
@@ -30,17 +30,18 @@ public class DataRetriever {
                             result.getInt(1),
                             result.getString(2),
                             DishTypeEnum.valueOf(result.getString(3)),
-                            ingredients
+                            ingredients,
+                            result.getDouble(4)
                     );
                 }
 
-                int ingredientId = result.getInt(4);
+                int ingredientId = result.getInt(5);
                 if (!result.wasNull()) {
                     ingredients.add(new Ingredient(
                             ingredientId,
-                            result.getString(5),
-                            result.getDouble(6),
-                            CategoryEnum.valueOf(result.getString(7)),
+                            result.getString(6),
+                            result.getDouble(7),
+                            CategoryEnum.valueOf(result.getString(8)),
                             null
                     ));
                 }
@@ -92,7 +93,7 @@ public class DataRetriever {
     }
 
     public List<Ingredient> createIngredients(List<Ingredient> newIngredients) {
-        String sql = "INSERT INTO ingredient(id, name, price, category) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ingredient(name, price, category, id_dish) VALUES (?, ?, ?, ?) returning id";
 
         try (Connection dbconnection = connection.getDBConnection()) {
             for (Ingredient ingredient : newIngredients) {
@@ -111,7 +112,67 @@ public class DataRetriever {
         }
     }
 
-    public List<Dish> findDishsByIngredientName(String ingredientName) {
+    public Dish saveDish(Dish dishToSave) {
+
+        String insertDishSql = "INSERT INTO dish(name, dish_type, price) VALUES (?, ?, ?) RETURNING id";
+
+        String updateDishSql = "UPDATE dish SET name = ?, dish_type = ?, price = ? WHERE id = ?";
+
+        String deleteRelationSql = "DELETE FROM ingredient WHERE id_dish = ?";
+
+        String insertRelationSql = "INSERT INTO ingredient(id_dish, ingredient.id) VALUES (?, ?)";
+        try (Connection dbconnection = connection.getDBConnection()) {
+            dbconnection.setAutoCommit(false);
+            int dishId = dishToSave.getId();
+            if (dishId == 0) {
+                try (PreparedStatement statement = dbconnection.prepareStatement(insertDishSql)) {
+                    statement.setString(1, dishToSave.getName());
+                    statement.setString(2, dishToSave.getDishType().name());
+                    statement.setObject(3, dishToSave.getPrice());
+
+                    ResultSet result = statement.executeQuery();
+                    result.next();
+                    dishId = result.getInt(1);
+                }
+            }
+            else {
+                try (PreparedStatement statement = dbconnection.prepareStatement(updateDishSql)) {
+                    statement.setString(1, dishToSave.getName());
+                    statement.setString(2, dishToSave.getDishType().name());
+                    statement.setObject(3, dishToSave.getPrice());
+                    statement.setInt(4, dishId);
+                    statement.executeUpdate();
+                }
+            }
+            try (PreparedStatement statement = dbconnection.prepareStatement(deleteRelationSql)) {
+                statement.setInt(1, dishId);
+                statement.executeUpdate();
+            }
+            for (Ingredient ingredient : dishToSave.getIngredients()) {
+                try (PreparedStatement statement = dbconnection.prepareStatement(insertRelationSql)) {
+                    statement.setInt(1, dishId);
+                    statement.setInt(2, ingredient.getId());
+                    statement.executeUpdate();
+                }
+            }
+
+            dbconnection.commit();
+
+            return new Dish(
+                    dishId,
+                    dishToSave.getName(),
+                    dishToSave.getDishType(),
+                    dishToSave.getIngredients(),
+                    dishToSave.getPrice()
+            );
+
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error in saveDish: " + e.getMessage());
+        }
+    }
+
+    public List<Dish> findDishByIngredientName(String ingredientName) {
 
         List<Dish> dishes = new ArrayList<>();
 
@@ -129,7 +190,8 @@ public class DataRetriever {
                 while (resultSet.next()) {
                     dishes.add(new Dish(
                             resultSet.getInt("id"),
-                            resultSet.getString("name")
+                            resultSet.getString("name"),
+                            DishTypeEnum.valueOf(resultSet.getString(3))
                     ));
                 }
             }

@@ -7,6 +7,10 @@
        dish_type VARCHAR CHECK ( dish_type IN ('START', 'MAIN', 'DESSERT'))
    );
 
+ALTER TABLE dish
+    ADD COLUMN price DOUBLE PRECISION;
+
+
 CREATE TYPE ingredient_type AS ENUM (('VEGETABLE', 'ANIMAL', 'MARINE', 'DAIRY', 'OTHER'));
 
    CREATE TABLE Ingredient(
